@@ -1,0 +1,11 @@
+[{:itonami.blueprint/id "cloud-itonami-isco-2153"
+  :itonami.blueprint/name "Community Telecommunications Engineers"
+  :itonami.blueprint/isco-08 "2153"
+  :itonami.blueprint/domain :engineering/telecommunications
+  :itonami.blueprint/license "AGPL-3.0-or-later"
+  :itonami.blueprint/social-impact [:operational-transparency :safety-by-design :local-jobs]
+  :itonami.blueprint/governor :telecommunications-engineering-governor
+  :itonami.blueprint/robotics true
+  :itonami.blueprint/required-technologies [:robotics :identity :forms :dmn :bpmn :audit-ledger]
+  :itonami.blueprint/status :public-oss
+  :db/id -1}]
