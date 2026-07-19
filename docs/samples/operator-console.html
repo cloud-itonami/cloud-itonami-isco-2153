@@ -1,0 +1,65 @@
+<html><head><meta charset="utf-8"><title>cloud-itonami-isco-2153 &middot; community telecommunications engineers</title><style>
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.ok { color: #137a3f; }
+body { font-family: system-ui,-apple-system,sans-serif; margin: 0; color: #1a1a1a; background: #fafafa; }
+header.bar { display: flex; align-items: center; gap: 12px; padding: 12px 20px; background: #fff; border-bottom: 1px solid #e5e5e5; }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid #f0f0f0; }
+h2 { margin-top: 0; font-size: 15px; }
+.warn { color: #b25c00; background: #fff8e1; padding: 2px 6px; border-radius: 4px; }
+main { max-width: 1080px; margin: 24px auto; padding: 0 20px; }
+header.bar h1 { font-size: 18px; margin: 0; font-weight: 600; }
+.muted { color: #888; font-size: 13px; }
+.critical { color: #fff; background: #b3261e; padding: 2px 6px; border-radius: 4px; font-weight: 600; }
+.card { background: #fff; border: 1px solid #e5e5e5; border-radius: 8px; padding: 16px; margin-bottom: 16px; }
+.err { color: #b3261e; background: #fbe9e7; padding: 2px 6px; border-radius: 4px; }
+th { font-weight: 600; color: #555; font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; }
+header.bar .badge { margin-left: auto; font-size: 12px; color: #666; }
+code { font-size: 12px; background: #f4f4f4; padding: 1px 4px; border-radius: 3px; }
+</style></head><body>
+<header class="bar">
+  <h1>Community Telecommunications Engineers (ISCO-08 2153) — Operator Console</h1>
+  <span class="badge">read-only sample · governor-gated · link margin &amp; spectrum-band containment always independently checked</span>
+</header>
+<main>
+  <section class="card">
+    <h2>Registered clients &amp; links</h2>
+    <p class="muted">Demo snapshot — build-time-generated from <code>telecomeng.store</code> via <code>telecomeng.render-html</code> (<code>clojure -M:render-html</code>), regenerated nightly. Committed-record count is a live re-read of <code>store/records-of</code> after the real graph ran — never a remembered number.</p>
+    <table>
+      <thead><tr><th>Client</th><th>Name</th><th>Link</th><th>Link name</th><th>Min margin</th><th>Allocated band</th><th>Committed records</th><th>Last op status</th></tr></thead>
+      <tbody>
+        <tr><td>client-1</td><td>Kobo Trade</td><td><code>L-1</code></td><td>rooftop-microwave</td><td>10 dB</td><td>5925&ndash;6425 MHz</td><td>2</td><td><span class="critical">HARD hold &middot; link-wrong-client</span></td></tr>
+        <tr><td>client-2</td><td>Meridian Wireless</td><td><code>L-2</code></td><td>valley-relay</td><td>8 dB</td><td>3550&ndash;3700 MHz</td><td>2</td><td><span class="ok">approved &amp; committed</span></td></tr>
+      </tbody>
+    </table>
+  </section>
+  <section class="card">
+    <h2>Action gate (Telecommunications Engineers Governor)</h2>
+    <p class="muted">HARD holds cannot be overridden. The link-margin floor and spectrum-band containment are rechecked against the registered link record on every proposal, at any confidence.</p>
+    <table>
+      <thead><tr><th>Op</th><th>Gate</th></tr></thead>
+      <tbody>
+        <tr><td><code>:approve-link-budget</code></td><td><span class="ok">auto-commit when the link margin meets the registered floor AND the carrier frequency falls inside the allocated band &middot; HARD hold otherwise (arithmetic and licensed-boundary checks, not estimates)</span></td></tr>
+        <tr><td><code>:activate-link</code></td><td><span class="warn">ALWAYS human approval &middot; RF transmission activation</span></td></tr>
+      </tbody>
+    </table>
+  </section>
+  <section class="card">
+    <h2>Audit trail (this run)</h2>
+    <p class="muted">Every request this scenario drove through the real compiled graph, in order — thread-id, client, op, the request's own link/margin, and the real disposition (auto-commit, approved-after-escalation, or the specific HARD-hold rule).</p>
+    <table>
+      <thead><tr><th>Thread</th><th>Client</th><th>Op</th><th>Link</th><th>Margin (dB)</th><th>Disposition</th></tr></thead>
+      <tbody>
+        <tr><td><code>c1-approve-ok</code></td><td>client-1</td><td><code>approve-link-budget</code></td><td>L-1</td><td>15</td><td><span class="ok">committed</span></td></tr>
+        <tr><td><code>c1-margin-low</code></td><td>client-1</td><td><code>approve-link-budget</code></td><td>L-1</td><td>5</td><td><span class="critical">HARD hold &middot; margin-below-minimum</span></td></tr>
+        <tr><td><code>c1-out-of-band</code></td><td>client-1</td><td><code>approve-link-budget</code></td><td>L-1</td><td>15</td><td><span class="critical">HARD hold &middot; out-of-band</span></td></tr>
+        <tr><td><code>c1-unknown-link</code></td><td>client-1</td><td><code>approve-link-budget</code></td><td>L-ghost</td><td>15</td><td><span class="critical">HARD hold &middot; unknown-link</span></td></tr>
+        <tr><td><code>ghost-no-client</code></td><td>client-ghost</td><td><code>approve-link-budget</code></td><td>L-1</td><td>15</td><td><span class="critical">HARD hold &middot; no-client</span></td></tr>
+        <tr><td><code>c1-activate</code></td><td>client-1</td><td><code>activate-link</code></td><td>L-1</td><td></td><td><span class="ok">approved &amp; committed</span></td></tr>
+        <tr><td><code>c1-wrong-link</code></td><td>client-1</td><td><code>approve-link-budget</code></td><td>L-2</td><td>12</td><td><span class="critical">HARD hold &middot; link-wrong-client</span></td></tr>
+        <tr><td><code>c2-approve-ok</code></td><td>client-2</td><td><code>approve-link-budget</code></td><td>L-2</td><td>12</td><td><span class="ok">committed</span></td></tr>
+        <tr><td><code>c2-activate</code></td><td>client-2</td><td><code>activate-link</code></td><td>L-2</td><td></td><td><span class="ok">approved &amp; committed</span></td></tr>
+      </tbody>
+    </table>
+  </section>
+</main>
+</body></html>
