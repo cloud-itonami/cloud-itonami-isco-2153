@@ -1,0 +1,33 @@
+;; What this vertical's robot physically does, declared for
+;; kotoba.robotics.process (kotoba-lang/robotics). `kbb -M:physics` runs it.
+;;
+;; README: an ISCO 2153 Telecommunications Engineers blueprint -- design/
+;; analysis is cognitive; physical execution is robotics-gated. The physical
+;; execution: raising a remote radio unit to its mount at a tower site, and
+;; the insulated wall of a roadside telecom cabinet in the sun.
+;;
+;; Every number without a cited source is marked `estimate` in its :basis.
+;; Replacing an estimate with a sourced value is this bot's growth work.
+{:physics/schema "itonami.physical-ai.spec.v1"
+ :repo "cloud-itonami/cloud-itonami-isco-2153"
+ :cases
+ [{:id :radio-unit-to-mount
+   :kind :manipulator
+   :procedure "arm on the tower-site lift raises a remote radio unit from the platform up to its pole mount"
+   :params {:l1-m 0.70 :l2-m 0.60 :m1-kg 10.0 :m2-kg 8.0
+            :from [0.70 -0.20] :to [0.50 0.90] :duration-s 4.0 :steps 500}
+   :sweep {:param :payload-kg :values [5.0 10.0 15.0 20.0 30.0]}
+   :quantity :peak-tau1-nm
+   :limit {:max 300.0 :basis "estimate: continuous shoulder torque of a ~20 kg payload class industrial arm"}
+   :boundary {:lo 1.0 :hi 60.0}}
+  {:id :cabinet-wall-sun
+   :kind :thermal
+   :procedure "roadside cabinet wall with foam insulation under six hours of sun: inner wall surface temperature"
+   :params {:conductivity-w-mk 0.03 :density-kg-m3 40.0 :specific-heat-j-kgk 1400.0
+            :t0-c 30.0 :t-hot-c 70.0 :h-front-w-m2k 25.0
+            :t-back-ambient-c 30.0 :h-back-w-m2k 5.0
+            :threshold-c 40.0 :duration-s 21600.0 :nodes 11}
+   :sweep {:param :thickness-m :values [0.005 0.01 0.02 0.03 0.05]}
+   :quantity :final-back-c
+   :limit {:max 40.0 :basis "estimate: 40 C inner wall keeps the cabinet air inside the equipment's rated range; 70 C is an assumed sol-air temperature"}
+   :boundary {:lo 0.002 :hi 0.06}}]}
