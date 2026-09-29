@@ -1,6 +1,6 @@
 (ns telecomeng.store
   "SSoT for the ISCO-08 2153 community telecommunications engineers
-  actor (itonami actor pattern, ADR-2607011000 / CLAUDE.md Actors
+  actor (itonami actor pattern, ADR-2607011000 / AGENTS.md Actors
   section). Modeled on cloud-itonami-isco-4311's bookkeeping.store.
 
   Domain:
