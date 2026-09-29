@@ -1,7 +1,7 @@
 (ns telecomeng.governor
   "TelecommunicationsEngineersGovernor — the independent safety/
   traceability layer for the ISCO-08 2153 community telecommunications
-  engineers actor (itonami actor pattern, ADR-2607011000 / CLAUDE.md
+  engineers actor (itonami actor pattern, ADR-2607011000 / AGENTS.md
   Actors section). Modeled on cloud-itonami-isco-4311's
   bookkeeping.governor. RF twist: a proposed link margin is checked
   arithmetically against the registered minimum, and a proposed
